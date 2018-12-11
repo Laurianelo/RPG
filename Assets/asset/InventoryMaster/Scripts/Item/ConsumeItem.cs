@@ -76,6 +76,7 @@ public class ConsumeItem : MonoBehaviour, IPointerDownHandler
                                     eS.gameObject.GetComponent<Inventory>().updateItemList();
                                     inventory.updateItemList();
                                     gearable = true;
+                                    tooltip.deactivateTooltip();
                                     if (duplication != null)
                                         Destroy(duplication.gameObject);
                                     break;
