@@ -46,3 +46,41 @@ MonoBehaviour:
     itemAttributes:
     - attributeName: Damage
       attributeValue: 10
+  - itemName: Helmet
+    itemID: 2
+    itemDesc: 'This helmet is created out of leather.
+
+      + 10 Health
+
+      + 10 Armor'
+    itemIcon: {fileID: 21300000, guid: 52b1e3fc60614e446b61e1c6bb148f57, type: 3}
+    itemModel: {fileID: 1697157729926254, guid: 9f526eb9d333fe3429e9f0677764a8cf,
+      type: 2}
+    itemValue: 10
+    itemType: 4
+    itemWeight: 5
+    maxStack: 1
+    indexItemInList: 999
+    rarity: 10
+    itemAttributes:
+    - attributeName: Armor
+      attributeValue: 10
+  - itemName: Bracer
+    itemID: 3
+    itemDesc: 'This Bracer is created out of leather.
+
+      + 10 Health
+
+      + 10 Armor'
+    itemIcon: {fileID: 21300000, guid: 6181a838cc0f68041be2ad979199897c, type: 3}
+    itemModel: {fileID: 1268395068871030, guid: 07fbeaa913d801b46a01590fa8e01d9f,
+      type: 2}
+    itemValue: 10
+    itemType: 1
+    itemWeight: 5
+    maxStack: 1
+    indexItemInList: 999
+    rarity: 10
+    itemAttributes:
+    - attributeName: Armor
+      attributeValue: 10
