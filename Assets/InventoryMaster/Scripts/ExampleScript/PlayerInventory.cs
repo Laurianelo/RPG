@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -19,15 +20,19 @@ public class PlayerInventory : MonoBehaviour
     Image hpImage;
     Image manaImage;
 
-    public float maxHealth = 100;
+    float maxHealth = 100;
     float maxMana = 100;
     float maxDamage = 0;
     float maxArmor = 0;
 
     public float currentHealth = 60;
     public float currentMana = 100;
-    float currentDamage = 0;
-    float currentArmor = 0;
+    public float currentDamage = 0;
+    public float currentArmor = 0;
+
+    public PlayerMotor playerMotor;
+    public Animation playerAnimation;
+
 
     int normalSize = 3;
 
@@ -156,6 +161,8 @@ public class PlayerInventory : MonoBehaviour
         hpImage = GameObject.Find("CurrentHp").GetComponent<Image>();
         manaImage = GameObject.Find("CurrentMana").GetComponent<Image>();
 
+        playerMotor = gameObject.GetComponent<PlayerMotor>();
+        playerAnimation = gameObject.GetComponent<Animation>();
 
         if (inputManagerDatabase == null)
             inputManagerDatabase = (InputManager)Resources.Load("InputManager");
@@ -173,7 +180,21 @@ public class PlayerInventory : MonoBehaviour
             craftSystemInventory = craftSystem.GetComponent<Inventory>();
     }
 
-   
+    public void ApplyDammage(float damage)
+    {
+        currentHealth = currentHealth - (damage - ((currentArmor * damage) / 100));
+        if(currentHealth <= 0)
+        {
+            Dead();
+        }
+    }
+
+    private void Dead()
+    {
+        playerMotor.isDead = true;
+        playerAnimation.Play("die");
+    }
+
     public void OnConsumeItem(Item item)
     {
         for (int i = 0; i < item.itemAttributes.Count; i++)
@@ -215,13 +236,13 @@ public class PlayerInventory : MonoBehaviour
         for (int i = 0; i < item.itemAttributes.Count; i++)
         {
             if (item.itemAttributes[i].attributeName == "Health")
-                maxHealth += item.itemAttributes[i].attributeValue;
+                currentHealth += item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Mana")
-                maxMana += item.itemAttributes[i].attributeValue;
+                currentMana += item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Armor")
-                maxArmor += item.itemAttributes[i].attributeValue;
+                currentArmor += item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Damage")
-                maxDamage += item.itemAttributes[i].attributeValue;
+                currentDamage += item.itemAttributes[i].attributeValue;
         }
 
     }
@@ -231,13 +252,13 @@ public class PlayerInventory : MonoBehaviour
         for (int i = 0; i < item.itemAttributes.Count; i++)
         {
             if (item.itemAttributes[i].attributeName == "Health")
-                maxHealth -= item.itemAttributes[i].attributeValue;
+                currentHealth -= item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Mana")
-                maxMana -= item.itemAttributes[i].attributeValue;
+                currentMana -= item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Armor")
-                maxArmor -= item.itemAttributes[i].attributeValue;
+                currentArmor -= item.itemAttributes[i].attributeValue;
             if (item.itemAttributes[i].attributeName == "Damage")
-                maxDamage -= item.itemAttributes[i].attributeValue;
+                currentDamage -= item.itemAttributes[i].attributeValue;
         }
 
     }
@@ -256,7 +277,11 @@ public class PlayerInventory : MonoBehaviour
         float percentageMana = ((currentMana * 100) / maxMana) / 100;
         manaImage.fillAmount = percentageMana;
 
-
+        //test for damages
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            ApplyDammage(10);
+        }
 
         if (Input.GetKeyDown(inputManagerDatabase.CharacterSystemKeyCode))
         {

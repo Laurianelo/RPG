@@ -13,6 +13,7 @@ public class PlayerMotor : MonoBehaviour {
 
     CapsuleCollider playerCapsuleCollider;
 
+    public bool isDead  ;
          
     // Use this for initialization
     void Start () {
@@ -30,55 +31,61 @@ public class PlayerMotor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //walk
-        if (Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.LeftShift))
+        if (!isDead)
         {
-            transform.Translate(0, 0, walkSpeed * Time.deltaTime);
-            animation.Play("walk");
+
+            //walk
+            if (Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.Translate(0, 0, walkSpeed * Time.deltaTime);
+                animation.Play("walk");
+            }
+
+
+            //run
+            if (Input.GetKey(KeyCode.Z) && Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.Translate(0, 0, runSpeed * Time.deltaTime);
+                animation.Play("run");
+            }
+
+            //back
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.Translate(0, 0, -walkSpeed * Time.deltaTime);
+                animation.Play("walk");
+            }
+
+            //left rotation
+            if (Input.GetKey(KeyCode.Q))
+            {
+                transform.Rotate(0,-turnSpeed * Time.deltaTime, 0);
+            }
+
+            //right rotation
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
+            }
+
+            //IDLE
+            if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.S))
+            {
+                animation.Play("idle");
+            }
+
+
+            //jump
+            if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+            {
+                Vector3 _velocity = gameObject.GetComponent<Rigidbody>().velocity;
+                _velocity.y = jumpSpeed.y;
+                gameObject.GetComponent<Rigidbody>().velocity = jumpSpeed;
+
+            }
+
         }
 
-
-        //run
-        if (Input.GetKey(KeyCode.Z) && Input.GetKey(KeyCode.LeftShift))
-        {
-            transform.Translate(0, 0, runSpeed * Time.deltaTime);
-            animation.Play("run");
-        }
-
-        //back
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(0, 0, -walkSpeed * Time.deltaTime);
-            animation.Play("walk");
-        }
-
-        //left rotation
-        if (Input.GetKey(KeyCode.Q))
-        {
-            transform.Rotate(0,-turnSpeed * Time.deltaTime, 0);
-        }
-
-        //right rotation
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
-        }
-
-        //IDLE
-        if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.S))
-        {
-            animation.Play("idle");
-        }
-
-
-        //jump
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {
-            Vector3 _velocity = gameObject.GetComponent<Rigidbody>().velocity;
-            _velocity.y = jumpSpeed.y;
-            gameObject.GetComponent<Rigidbody>().velocity = jumpSpeed;
-
-        }
 
     }
 }
